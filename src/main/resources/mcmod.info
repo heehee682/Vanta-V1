@@ -1,0 +1,10 @@
+[
+  {
+    "modid": "custommod",
+    "name": "Custom Mod",
+    "description": "A custom mod with a modern ClickGUI.",
+    "version": "1.0",
+    "mcversion": "1.8.9",
+    "authorList": ["DeinName"]
+  }
+]
