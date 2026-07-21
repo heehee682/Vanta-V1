@@ -36,7 +36,8 @@ public class AutoClickerModule extends Module {
             }
             
             if (System.currentTimeMillis() >= nextClickTime) {
-                KeyBinding.click(mc.options.attackKey.getDefaultKey().getCode());
+                // HIER WURDE .getCode() ENTFERNT (passt jetzt für 1.21.10)
+                KeyBinding.click(mc.options.attackKey.getDefaultKey());
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
             }
         } else {
