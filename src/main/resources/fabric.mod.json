@@ -3,11 +3,11 @@
   "id": "custommod",
   "version": "1.0",
   "name": "Custom Mod",
-  "description": "A custom mod with a modern ClickGUI for 26.1.2.",
-  "authors": ["DeinName"],
+  "description": "A custom mod with a modern ClickGUI for 1.21.10.",
+  "authors": ["nelusion"],
   "depends": {
     "fabricloader": ">=0.16.0",
-    "minecraft": "26.1.2",
+    "minecraft": "1.21.10",
     "java": ">=21",
     "fabric-api": "*"
   },
