@@ -6,6 +6,7 @@ import com.deinname.mod.settings.SliderSetting;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AutoClickerModule extends Module {
@@ -35,8 +36,14 @@ public class AutoClickerModule extends Module {
             }
             
             if (System.currentTimeMillis() >= nextClickTime) {
-                // Führt den Angriff direkt über die offizielle Minecraft Funktion aus
-                mc.doAttack();
+                try {
+                    // Nutzt Reflection, um die private Methode doAttack() aufzurufen
+                    Method m = MinecraftClient.class.getDeclaredMethod("doAttack");
+                    m.setAccessible(true);
+                    m.invoke(mc);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
             }
         } else {
