@@ -1,39 +1,36 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url = "https://maven.minecraftforge.net/" }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
-    }
+plugins {
+    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'maven-publish'
 }
-
-apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "1.0"
 group = "com.deinname.mod"
 archivesBaseName = "CustomMod"
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+dependencies {
+    minecraft "com.mojang:minecraft:26.1.2"
+    mappings "net.fabricmc:yarn:26.1.2+build.1:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.16.0"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+26.1.2"
 }
 
-minecraft {
-    version = "1.8.9-11.15.1.2318-1.8.9"
-    runDir = "run"
-    mappings = "stable_20"
+base {
+    archivesName = project.archives_base_name
 }
 
 processResources {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
