@@ -3,9 +3,9 @@ package com.deinname.mod.modules.impl;
 import com.deinname.mod.modules.Category;
 import com.deinname.mod.modules.Module;
 import com.deinname.mod.settings.SliderSetting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import org.lwjgl.input.Mouse;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.KeyBinding;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,26 +21,22 @@ public class AutoClickerModule extends Module {
         super("AutoClicker", Category.COMBAT);
         minCps = new SliderSetting("Min CPS", 10, 1, 20);
         maxCps = new SliderSetting("Max CPS", 15, 1, 20);
-        
         addSetting(minCps);
         addSetting(maxCps);
     }
 
     @Override
     public void onUpdate() {
-        Minecraft mc = Minecraft.getMinecraft();
+        MinecraftClient mc = MinecraftClient.getInstance();
         
-        if (mc.thePlayer != null && mc.currentScreen == null && Mouse.isButtonDown(0)) {
-            
+        if (mc.player != null && mc.currentScreen == null && GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), 0) == 1) {
             if (!wasHolding) {
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
                 wasHolding = true;
             }
             
             if (System.currentTimeMillis() >= nextClickTime) {
-                // Löst den Angriff offiziell über das KeyBinding System aus
-                KeyBinding.onTick(mc.gameSettings.keyBindAttack.getKeyCode());
-                
+                KeyBinding.click(mc.options.attackKey.getDefaultKey().getCode());
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
             }
         } else {
