@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "custommod",
+  "version": "1.0",
+  "name": "Custom Mod",
+  "description": "A custom mod with a modern ClickGUI for 26.1.2.",
+  "authors": ["DeinName"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "26.1.2",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "entrypoints": {
+    "client": [
+      "com.deinname.mod.Main"
+    ]
+  }
+}
