@@ -4,6 +4,7 @@ import com.deinname.mod.modules.Category;
 import com.deinname.mod.modules.Module;
 import com.deinname.mod.settings.SliderSetting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Mouse;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,7 +30,6 @@ public class AutoClickerModule extends Module {
     public void onUpdate() {
         Minecraft mc = Minecraft.getMinecraft();
         
-        // Nur klicken, wenn man im Spiel ist und die linke Maustaste gedrückt hält
         if (mc.thePlayer != null && mc.currentScreen == null && Mouse.isButtonDown(0)) {
             
             if (!wasHolding) {
@@ -38,10 +38,9 @@ public class AutoClickerModule extends Module {
             }
             
             if (System.currentTimeMillis() >= nextClickTime) {
-                // Löst den Angriff aus, indem wir dem Spiel sagen, die Attacke-Taste wurde gedrückt
-                mc.gameSettings.keyBindAttack.pressTime = 1; 
+                // Löst den Angriff offiziell über das KeyBinding System aus
+                KeyBinding.onTick(mc.gameSettings.keyBindAttack.getKeyCode());
                 
-                // Nächste Klickzeit berechnen
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
             }
         } else {
