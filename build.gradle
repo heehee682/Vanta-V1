@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -11,19 +11,25 @@ base {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:26.1.2"
-    mappings "net.fabricmc:yarn:26.1.2+build.1:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.16.0"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+26.1.2"
+    minecraft "com.mojang:minecraft:1.21.10"
+    mappings "net.fabricmc:yarn:1.21.10+build.1:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.16.9"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.110.0+1.21.10"
 }
 
-// Hier sagen wir Gradle: Nutze Java 25 für den Code, auch wenn du selbst auf Java 21 läuft!
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 25
+    it.options.release = 21
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
