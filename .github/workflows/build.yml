@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Setup Gradle
-      run: chmod +x gradlew
+      run: gradle wrapper --gradle-version 8.8
 
     - name: Build Mod
       run: ./gradlew build
