@@ -4,7 +4,6 @@ import com.deinname.mod.modules.Category;
 import com.deinname.mod.modules.Module;
 import com.deinname.mod.settings.SliderSetting;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -36,8 +35,8 @@ public class AutoClickerModule extends Module {
             }
             
             if (System.currentTimeMillis() >= nextClickTime) {
-                // HIER WURDE .getCode() ENTFERNT (passt jetzt für 1.21.10)
-                KeyBinding.click(mc.options.attackKey.getDefaultKey());
+                // Führt den Angriff direkt über die offizielle Minecraft Funktion aus
+                mc.doAttack();
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
             }
         } else {
