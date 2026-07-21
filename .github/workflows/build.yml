@@ -13,32 +13,20 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 8
+    - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: '8'
-        distribution: 'zulu'
-
-    - name: Download Forge 1.8.9 MDK
-      run: wget https://maven.minecraftforge.net/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-mdk.zip -O mdk.zip
-
-    - name: Unzip MDK
-      run: unzip mdk.zip -d mdk
-
-    - name: Inject Mod Code
-      run: |
-        rm -rf mdk/src
-        cp -r src mdk/src
-        cp build.gradle mdk/build.gradle
+        java-version: '21'
+        distribution: 'temurin'
 
     - name: Setup Gradle
-      run: chmod +x mdk/gradlew
+      run: chmod +x gradlew
 
     - name: Build Mod
-      run: cd mdk && ./gradlew build
+      run: ./gradlew build
 
     - name: Upload Mod JAR
       uses: actions/upload-artifact@v4
       with:
-        name: CustomMod-1.8.9
-        path: mdk/build/libs/*.jar
+        name: CustomMod-26.1.2
+        path: build/libs/*.jar
