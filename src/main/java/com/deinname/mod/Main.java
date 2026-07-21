@@ -2,47 +2,39 @@ package com.deinname.mod;
 
 import com.deinname.mod.modules.ModuleManager;
 import com.deinname.mod.ui.ClickGuiScreen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
+import org.lwjgl.glfw.GLFW;
 
-@Mod(modid = "custommod", name = "Custom Mod", version = "1.0")
-public class Main {
+public class Main implements ClientModInitializer {
 
-    @Mod.Instance
-    public static Main instance;
-
-    // Unser benutzerdefinierter Keybind
     public static KeyBinding openClickGui;
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
+    @Override
+    public void onInitializeClient() {
         ModuleManager.init();
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(ModuleManager.class);
 
-        // Keybind erstellen (Standard: Rechts-Shift) und in Minecraft registrieren
-        openClickGui = new KeyBinding("Open ClickGUI", Keyboard.KEY_RSHIFT, "Custom Mod");
-        ClientRegistry.registerKeyBinding(openClickGui);
-    }
+        openClickGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "Open ClickGUI",
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_RIGHT_SHIFT,
+            "Custom Mod"
+        ));
 
-    // Wir nutzen den ClientTickEvent, um den Klick abzufangen
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            // Nur ausführen, wenn man im Spiel ist (nicht im Menü)
-            if (Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().currentScreen == null) {
-                // isPressed() gibt true zurück, wenn die Taste einmal gedrückt wurde
-                if (openClickGui.isPressed()) {
-                    Minecraft.getMinecraft().displayGuiScreen(new ClickGuiScreen());
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while (openClickGui.wasPressed()) {
+                client.setScreen(new ClickGuiScreen());
+            }
+            
+            for (com.deinname.mod.modules.Module module : ModuleManager.modules) {
+                if (module.isToggled()) {
+                    module.onUpdate();
                 }
             }
-        }
+        });
     }
 }
