@@ -29,15 +29,19 @@ public class AutoClickerModule extends Module {
     public void onUpdate() {
         Minecraft mc = Minecraft.getMinecraft();
         
+        // Nur klicken, wenn man im Spiel ist und die linke Maustaste gedrückt hält
         if (mc.thePlayer != null && mc.currentScreen == null && Mouse.isButtonDown(0)) {
+            
             if (!wasHolding) {
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
                 wasHolding = true;
             }
             
             if (System.currentTimeMillis() >= nextClickTime) {
-                mc.leftClickCounter = 0;
-                mc.clickMouse();
+                // Löst den Angriff aus, indem wir dem Spiel sagen, die Attacke-Taste wurde gedrückt
+                mc.gameSettings.keyBindAttack.pressTime = 1; 
+                
+                // Nächste Klickzeit berechnen
                 nextClickTime = System.currentTimeMillis() + getRandomDelay();
             }
         } else {
