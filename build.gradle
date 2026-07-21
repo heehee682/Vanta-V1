@@ -5,17 +5,16 @@ plugins {
 
 version = "1.0"
 group = "com.deinname.mod"
-archivesBaseName = "CustomMod"
+
+base {
+    archivesName = "CustomMod"
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:26.1.2"
     mappings "net.fabricmc:yarn:26.1.2+build.1:v2"
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+26.1.2"
-}
-
-base {
-    archivesName = project.archives_base_name
 }
 
 processResources {
