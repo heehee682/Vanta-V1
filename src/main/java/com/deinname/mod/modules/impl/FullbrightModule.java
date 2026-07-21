@@ -2,10 +2,11 @@ package com.deinname.mod.modules.impl;
 
 import com.deinname.mod.modules.Category;
 import com.deinname.mod.modules.Module;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.SimpleOption;
 
 public class FullbrightModule extends Module {
-    private float oldGamma;
+    private double oldGamma;
 
     public FullbrightModule() {
         super("Fullbright", Category.RENDER);
@@ -13,12 +14,13 @@ public class FullbrightModule extends Module {
 
     @Override
     public void onEnable() {
-        oldGamma = Minecraft.getMinecraft().gameSettings.gammaSetting;
-        Minecraft.getMinecraft().gameSettings.gammaSetting = 100.0F;
+        SimpleOption<Double> gamma = MinecraftClient.getInstance().options.getGamma();
+        oldGamma = gamma.getValue();
+        gamma.setValue(10.0); // Sehr heller Gamma-Wert
     }
 
     @Override
     public void onDisable() {
-        Minecraft.getMinecraft().gameSettings.gammaSetting = oldGamma;
+        MinecraftClient.getInstance().options.getGamma().setValue(oldGamma);
     }
 }
